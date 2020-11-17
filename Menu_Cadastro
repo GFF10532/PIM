@@ -1,0 +1,155 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+
+typedef struct{//Aqui definimos um tipo de dado do tipo funcionário
+    char nome[40];
+    char cpf[15];
+    int dataNascimento; // comentar com o Wisley como fazer esse dado
+    char sexo[15];
+    char estadoCivil[30];
+    float pesocliente;
+    char endereco[70];
+    char cidade[30];
+    int long cep;
+    int numero;
+    char telefone[13];
+    char email[40];
+    char doenca[70]; // Doença - Diagnóstico
+    char remedio[70]; /* Transformar esses campos em um só Remédios */
+
+}funcionario;
+
+typedef struct{//Aqui definimos um tipo de dado do tipo médico
+    char nome[40];
+    char cpf[15];
+    int dataNascimento; // comentar com o Wisley como fazer esse dado
+    char sexo[15];
+    char estadoCivil[30];
+    float pesocliente;
+    char endereco[70];
+    char cidade[30];
+    int long cep;
+    int numero;
+    char telefone[13];
+    char email[40];
+    char doenca[70]; // Doença - Diagnóstico
+    char remedio[70]; /* Transformar esses campos em um só Remédios */
+
+}medico;
+
+typedef struct{//Aqui definimos um tipo de dado do tipo paciente
+    char nome[40];
+    char cpf[15];
+    char dataNascimento; // comentar com o Wisley como fazer esse dado
+    char sexo[15];
+    char estadoCivil[30];
+    float pesocliente;
+    char endereco[70];
+    char cidade[30];
+    char cep;
+    char numero;
+    char telefone[13];
+    char email[40];
+    char doenca[70]; // Doença - Diagnóstico
+    char remedio[70]; /* Transformar esses campos em um só Remédios */
+
+}paciente;
+
+void menuCadastro(){
+   int op, i, boolean = 0, tam_p, tam_f, tam_m;
+
+   paciente *p;
+   funcionario *f;
+   medico *m;
+
+   p = malloc(tam_p * sizeof(paciente));
+   f = malloc(tam_f * sizeof(funcionario));
+   m = malloc(tam_m * sizeof(medico));
+
+    do{
+        printf("\n*** Menu de Cadastro ***\n");
+		printf("[1] Cadastrar Paciente \n");
+		printf("[2] Cadastrar Médico \n");
+		printf("[3] Cadastrar Funcionário \n");
+		printf("[4] Voltar \n");
+		printf("Escolha uma opção: \n");
+		scanf("%d", &op);
+
+        switch (op){
+            case 1: printf("Digite quantos pacientes deseja cadastrar: \n");
+                    scanf("%d", &tam_p);
+                    cadastraPaciente(p, tam_p);
+                    printf("Paciente não enirado !");
+                    break;
+            case 4: system("cls");
+                    //menuPrincipal();
+                    break;
+
+        }
+
+        system("pause"); //ou getch()
+		system("cls"); //limpa a tela
+
+    } while (op != 5);
+
+}
+
+void cadastraPaciente(int tam_p, paciente *p){
+    int i;
+
+    for (i = 0; i < tam_p; i++){
+        fflush(stdin);
+        printf("Informe o Nome do paciente: ");
+        gets((p+i)->nome); //
+        fflush(stdin);
+        printf("Informe o CPF: ");
+        gets((p+i)->cpf);
+        fflush(stdin);
+        printf("Informe a data de nascimento: ");
+        scanf("%d", &(p+i)->dataNascimento);
+        fflush(stdin);
+        printf("Informe o sexo: ");
+        gets((p+i)->sexo);
+        fflush(stdin);
+        printf("Informe estado civil: ");
+        gets((p+i)->estadoCivil);
+        fflush(stdin);
+        printf("Digite o peço do paciente: ");
+        scanf("%f", &(p+i)->pesocliente);
+        fflush(stdin);
+        printf("Digite endereço do paciente: ");
+        gets((p+i)->endereco);
+        fflush(stdin);
+        printf("Informe número: ");
+        scanf("%d", &(p+i)->numero);
+        fflush(stdin);
+        printf("Informe a cidade: ");
+        gets((p+i)->cidade);
+        fflush(stdin);
+        printf("Informe o CEP: ");
+        scanf("%d", &(p+i)->cep);
+        fflush(stdin);
+        printf("Informe o telefone: ");
+        gets((p+i)->telefone);
+        fflush(stdin);
+        printf("Informe o E-mail: ");
+        gets((p+i)->email);
+        fflush(stdin);
+        printf("Informe se o paciente tem alguma doença: ");
+        gets((p+i)->doenca);
+        fflush(stdin);
+        printf("Informe se o paciente está tomando algum rémedio: ");
+        gets((p+i)->remedio);
+        fflush(stdin);
+    }
+
+    printf("Cadastro feito com Sucesso !");
+}
+
+int main()
+{
+   setlocale(LC_ALL, "Portuguese");
+
+   menuCadastro();
+}
