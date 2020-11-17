@@ -1,0 +1,113 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+
+typedef struct{//Aqui definimos um tipo de dado do tipo funcionário
+    char nome[40];
+    char cpf[15];
+    int dataNascimento; // comentar com o Wisley como fazer esse dado
+    char sexo[15];
+    char estadoCivil[30];
+    float pesocliente;
+    char endereco[70];
+    char cidade[30];
+    int long cep;
+    int numero;
+    char telefone[13];
+    char email[40];
+    char doenca[70]; // Doença - Diagnóstico
+    char remedio[70]; /* Transformar esses campos em um só Remédios */
+
+}funcionario;
+
+typedef struct{//Aqui definimos um tipo de dado do tipo médico
+    char nome[40];
+    char cpf[15];
+    int dataNascimento; // comentar com o Wisley como fazer esse dado
+    char sexo[15];
+    char estadoCivil[30];
+    float pesocliente;
+    char endereco[70];
+    char cidade[30];
+    int long cep;
+    int numero;
+    char telefone[13];
+    char email[40];
+    char doenca[70]; // Doença - Diagnóstico
+    char remedio[70]; /* Transformar esses campos em um só Remédios */
+
+}medico;
+
+typedef struct{//Aqui definimos um tipo de dado do tipo paciente
+    char nome[40];
+    char cpf[15];
+    char dataNascimento; // comentar com o Wisley como fazer esse dado
+    char sexo[15];
+    char estadoCivil[30];
+    float pesocliente;
+    char endereco[70];
+    char cidade[30];
+    char cep;
+    char numero;
+    char telefone[13];
+    char email[40];
+    char doenca[70]; // Doença - Diagnóstico
+    char remedio[70]; /* Transformar esses campos em um só Remédios */
+
+}paciente;
+
+void menuPrincipal(){
+
+   int op, i, boolean = 0, tam_p, tam_f, tam_m;
+
+   paciente *p;
+   funcionario *f;
+   medico *m;
+
+   p = malloc(tam_p * sizeof(paciente));
+   f = malloc(tam_f * sizeof(funcionario));
+   m = malloc(tam_m * sizeof(medico));
+
+   do {
+
+        printf("\n*** Menu Principal ***\n");
+		printf("[1] Cadastrar no Sistema \n");
+		printf("[2] Agendar/Cancelar Consulta\n");
+		printf("[3] Consultar Relatório \n");
+		printf("[4] Consultar dados \n");
+		printf("[5] Deslogar \n");
+		printf("Escolha uma opção: \n");
+		scanf("%d", &op);
+
+        switch (op){
+            case 1: printf("1");
+                    break;
+            case 2: printf("2");
+                    break;
+            case 3: printf("3");
+                    break;
+            case 4: printf("4");
+                    break;
+            case 5: printf("5");
+                    system("cls"); //limpa a tela
+                    break;
+            default: printf("Opção inválida !\n");
+                     break;
+
+        }
+
+        system("pause"); //ou getch()
+		system("cls"); //limpa a tela
+
+    } while (op != 5);
+
+    printf("Boa Noite !");
+}
+
+
+int main()
+{
+   setlocale(LC_ALL, "Portuguese");
+
+   menuPrincipal();
+}
