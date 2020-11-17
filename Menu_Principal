@@ -80,15 +80,15 @@ void menuPrincipal(){
 		scanf("%d", &op);
 
         switch (op){
-            case 1: printf("1");
+            case 1: menuCadastro();
                     break;
-            case 2: printf("2");
+            case 2: menuAgendar();
                     break;
-            case 3: printf("3");
+            case 3: menuRelatorio();
                     break;
-            case 4: printf("4");
+            case 4: menuConsulta();
                     break;
-            case 5: printf("5");
+            case 5: menuPrincipal();
                     system("cls"); //limpa a tela
                     break;
             default: printf("Opção inválida !\n");
