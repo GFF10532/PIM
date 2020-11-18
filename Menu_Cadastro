@@ -15,8 +15,6 @@ typedef struct{//Aqui definimos um tipo de dado do tipo funcionário
     int numero;
     char telefone[13];
     char email[40];
-    char doenca[70]; // Doença - Diagnóstico
-    char remedio[70]; /* Transformar esses campos em um só Remédios */
 
 }funcionario;
 
@@ -33,8 +31,6 @@ typedef struct{//Aqui definimos um tipo de dado do tipo médico
     int numero;
     char telefone[13];
     char email[40];
-    char doenca[70]; // Doença - Diagnóstico
-    char remedio[70]; /* Transformar esses campos em um só Remédios */
 
 }medico;
 
@@ -51,8 +47,6 @@ typedef struct{//Aqui definimos um tipo de dado do tipo paciente
     char numero;
     char telefone[13];
     char email[40];
-    char doenca[70]; // Doença - Diagnóstico
-    char remedio[70]; /* Transformar esses campos em um só Remédios */
 
 }paciente;
 
@@ -92,7 +86,7 @@ void menuCadastro(){
 		system("cls"); //limpa a tela
 
     } while (op != 5);
-
+free(p);
 }
 
 void cadastraPaciente(int tam_p, paciente *p){
@@ -136,16 +130,95 @@ void cadastraPaciente(int tam_p, paciente *p){
         printf("Informe o E-mail: ");
         gets((p+i)->email);
         fflush(stdin);
-        printf("Informe se o paciente tem alguma doença: ");
-        gets((p+i)->doenca);
-        fflush(stdin);
-        printf("Informe se o paciente está tomando algum rémedio: ");
-        gets((p+i)->remedio);
-        fflush(stdin);
-    }
+        }
 
     printf("Cadastro feito com Sucesso !");
 }
+void cadastraFuncionario(int tam_f, funcionario *f){
+    int i;
+
+    for (i = 0; i < tam_f; i++){
+        fflush(stdin);
+        printf("Informe o Nome do funcionário: ");
+        gets((f+i)->nome); //
+        fflush(stdin);
+        printf("Informe o CPF: ");
+        gets((f+i)->cpf);
+        fflush(stdin);
+        printf("Informe a data de nascimento: ");
+        scanf("%d", &(f+i)->dataNascimento);
+        fflush(stdin);
+        printf("Informe o sexo: ");
+        gets((f+i)->sexo);
+        fflush(stdin);
+        printf("Informe estado civil: ");
+        gets((f+i)->estadoCivil);
+        fflush(stdin);
+        printf("Digite o peço do funcionário: ");
+        scanf("%f", &(f+i)->pesocliente);
+        fflush(stdin);
+        printf("Digite endereço do funcionário: ");
+        gets((f+i)->endereco);
+        fflush(stdin);
+        printf("Informe número: ");
+        scanf("%d", &(f+i)->numero);
+        fflush(stdin);
+        printf("Informe a cidade: ");
+        gets((f+i)->cidade);
+        fflush(stdin);
+        printf("Informe o CEP: ");
+        scanf("%d", &(f+i)->cep);
+        fflush(stdin);
+        printf("Informe o telefone: ");
+        gets((f+i)->telefone);
+        fflush(stdin);
+        printf("Informe o E-mail: ");
+        gets((f+i)->email);
+        fflush(stdin);
+        }
+
+void cadastraMedico(int tam_m, medico *m){
+    int i;
+
+    for (i = 0; i < tam_m; i++){
+        fflush(stdin);
+        printf("Informe o Nome do médico: ");
+        gets((m+i)->nome); //
+        fflush(stdin);
+        printf("Informe o CPF: ");
+        gets((m+i)->cpf);
+        fflush(stdin);
+        printf("Informe a data de nascimento: ");
+        scanf("%d", &(m+i)->dataNascimento);
+        fflush(stdin);
+        printf("Informe o sexo: ");
+        gets((m+i)->sexo);
+        fflush(stdin);
+        printf("Informe estado civil: ");
+        gets((m+i)->estadoCivil);
+        fflush(stdin);
+        printf("Digite o peço do médico: ");
+        scanf("%f", &(m+i)->pesocliente);
+        fflush(stdin);
+        printf("Digite endereço do médico: ");
+        gets((m+i)->endereco);
+        fflush(stdin);
+        printf("Informe número: ");
+        scanf("%d", &(m+i)->numero);
+        fflush(stdin);
+        printf("Informe a cidade: ");
+        gets((m+i)->cidade);
+        fflush(stdin);
+        printf("Informe o CEP: ");
+        scanf("%d", &(m+i)->cep);
+        fflush(stdin);
+        printf("Informe o telefone: ");
+        gets((m+i)->telefone);
+        fflush(stdin);
+        printf("Informe o E-mail: ");
+        gets((m+i)->email);
+        fflush(stdin);
+        }
 
 int main()
 {
