@@ -1,0 +1,255 @@
+#include <stdio.h>
+#include <locale.h>
+#include <string.h>
+
+
+typedef struct{//Aqui definimos um tipo de dado do tipo funcionário
+    char nome[40];
+    char cpf[15];
+    int dataNascimento; // comentar com o Wisley como fazer esse dado
+    char sexo[15];
+    char estadoCivil[30];
+    float pesocliente;
+    char endereco[70];
+    char cidade[30];
+    int long cep;
+    int numero;
+    char telefone[13];
+    char email[40];
+    char doenca[70]; // Doença - Diagnóstico
+    char remedio[70]; /* Transformar esses campos em um só Remédios */
+
+}funcionario;
+
+typedef struct{//Aqui definimos um tipo de dado do tipo médico
+    char nome[40];
+    char cpf[15];
+    int dataNascimento; // comentar com o Wisley como fazer esse dado
+    char sexo[15];
+    char estadoCivil[30];
+    float pesocliente;
+    char endereco[70];
+    char cidade[30];
+    int long cep;
+    int numero;
+    char telefone[13];
+    char email[40];
+    char doenca[70]; // Doença - Diagnóstico
+    char remedio[70]; /* Transformar esses campos em um só Remédios */
+
+}medico;
+
+typedef struct{//Aqui definimos um tipo de dado do tipo paciente
+    char nome[40];
+    char cpf[15];
+    char dataNascimento; // comentar com o Wisley como fazer esse dado
+    char sexo[15];
+    char estadoCivil[30];
+    float pesocliente;
+    char endereco[70];
+    char cidade[30];
+    char cep;
+    char numero;
+    char telefone[13];
+    char email[40];
+    char doenca[70]; // Doença - Diagnóstico
+    char remedio[70]; /* Transformar esses campos em um só Remédios */
+
+}paciente;
+
+typedef struct{
+
+    char data_consulta[15];
+    char nome_paciente[25];
+    char nome_medico[25];
+    char tipo_consulta[50];
+    char horario[15];
+
+}consulta;
+
+typedef struct{
+
+    char data_exame[15];
+    char nome[25];
+    char tipo_exame[50];
+
+} exame;
+
+void menuConsulta(){
+
+   int op, i, boolean = 0, tam_p, tam_f, tam_m;
+   char nome_consult[25], nome_exame[25];
+
+   paciente *p;
+   funcionario *f;
+   medico *m;
+   consulta *c;
+   exame *e;
+
+   p = malloc(tam_p * sizeof(paciente));
+   f = malloc(tam_f * sizeof(funcionario));
+   m = malloc(tam_m * sizeof(medico));
+   c = malloc(50 * sizeof(consulta));
+   e = malloc(50 * sizeof(exame));
+
+   do{
+        printf("\n*** Menu de Consulta ***\n");
+        printf("[1] Agendar Consulta \n");
+        printf("[2] Remarcar Consulta \n");
+        printf("[3] Agendar Exame \n");
+        printf("[4] Remarcar Exame \n");
+        printf("[5] Voltar \n");
+        printf("Escolha uma opção: \n");
+		scanf("%d", &op);
+
+        switch (op){
+            case 1: marcaConsulta(c);
+                    break;
+            case 2: fflush(stdin);
+                    printf("Digite o nome do paciente: ");
+                    gets(nome_consult);
+                    remarcaConsulta(c, nome_consult);
+                    break;
+            case 3: marcaExame(e);
+                    break;
+            case 4: fflush(stdin);
+                    printf("Digite o nome do paciente: ");
+                    gets(nome_exame);
+                    remarcaExame(e, nome_exame);
+                    break;
+            case 5: printf("5"); //menuPricipal();
+                    system("cls"); //limpa a tela
+                    break;
+            default: printf("Opção inválida !\n");
+                     break;
+
+        }
+
+        system("pause"); //ou getch()
+		system("cls"); //limpa a tela
+
+   } while (op != 5);
+}
+
+void marcaConsulta(consulta *c){
+    int i = 0;
+
+    fflush(stdin);
+    printf("Digite a data desejada para marcar a consulta [DD/MM/YYYY]: ");
+    gets((c+i)->data_consulta);
+    printf("Informe o nome do paciente: ");
+    gets((c+i)->nome_paciente);
+    printf("Informe o nome médico: ");
+    gets((c+i)->nome_medico);
+    printf("É consulta ou retorno ? \n");
+    gets((c+i)->tipo_consulta);
+    printf("Informe o horário da(o) consulta/retorno [00:00]: ");
+    gets((c+i)->horario);
+    printf("Consulta marcada com sucesso ! \n");
+    //funciona -->> printf("%s", (c+i)->nome_paciente->nome);
+}
+
+void remarcaConsulta(consulta *c, char nome_consult[25]){
+
+    int i, boolean = 0, achou = 0;
+    char op;
+
+    strlwr(nome_consult);
+
+    for (i = 0; i < 50; i++){
+        if (strcmp(strlwr((c+i)->nome_paciente), nome_consult) == 0){ // compara se as duas strings são iguais ana == ana
+            achou = 1;
+            break;
+        }
+    }
+
+    while (boolean == 0) {
+        if (achou == 1) {
+            fflush(stdin);
+            printf("O paciente possui uma consulta marcada na data %s \n", (c+i)->data_consulta);
+            printf("Deseja mudar a data atual ? S ou N ? \n");
+            scanf("%c", &op);
+            if((op != 'N' && op != 'n') && (op != 'S' && op != 's')){
+                printf("Escolha uma opção válida ! \n");
+            } else if (op == 'S' || op == 's') {
+                fflush(stdin);
+                printf("Digite a nova data: ");
+                gets((c+i)->data_consulta);
+                fflush(stdin);
+                printf("Data Alterada com sucesso ! \n");
+                boolean = 1;
+            } else {
+                printf("A Data escolhida foi mantida ! \n");
+                getch();
+                boolean = 1;
+            }
+        } else {
+            printf("Paciente não encontrado !\n");
+            boolean = 1;
+        }
+    }
+}
+
+void marcaExame(exame *e){
+    int i = 0, tam;
+
+    printf("Deseja marcar quantos exames ?\n");
+    scanf("%d", &tam);
+
+    for(i = 0; i < tam; i++){
+        fflush(stdin);
+        printf("Digite a data desejada para marcar o exame [DD/MM/YYYY]: ");
+        gets((e+i)->data_exame);
+        printf("Informe o nome do paciente: ");
+        gets((e+i)->nome);
+        printf("Exame marcado com sucesso ! \n");
+        //funciona -->> printf("%s", (c+i)->nome_paciente->nome);
+    }
+}
+
+void remarcaExame(exame *e, char nome_exame[25]){
+    int i, boolean = 0, achou = 0;
+    char op;
+
+    strlwr(nome_exame);
+
+    for (i = 0; i < 50; i++){
+        if (strcmp(strlwr((e+i)->nome), nome_exame) == 0){ // compara se as duas strings são iguais ana == ana
+            achou = 1;
+            break;
+        }
+    }
+
+    while (boolean == 0) {
+        if (achou == 1) {
+            fflush(stdin);
+            printf("O paciente possui um exame marcado na data %s \n", (e+i)->data_exame);
+            printf("Deseja mudar a data atual ? S ou N ? \n");
+            scanf("%c", &op);
+            if((op != 'N' && op != 'n') && (op != 'S' && op != 's')){
+                printf("Escolha uma opção válida ! \n");
+            } else if (op == 'S' || op == 's') {
+                fflush(stdin);
+                printf("Digite a nova data: ");
+                gets((e+i)->data_exame);
+                fflush(stdin);
+                printf("Data Alterada com sucesso ! \n");
+                boolean = 1;
+            } else {
+                printf("A Data escolhida foi mantida ! \n");
+                getch();
+                boolean = 1;
+            }
+        } else {
+            printf("Paciente não encontrado !\n");
+            boolean = 1;
+        }
+    }
+}
+
+void main () {
+
+    setlocale(LC_ALL, "Portuguese");
+
+    menuConsulta();
+}
