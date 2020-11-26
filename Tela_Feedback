@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <locale.h>
+
+typedef struct{
+
+    int atnd_func;
+    int atnd_consult;
+    int preco_consult;
+    int estab;
+    char descri_feed[50];
+
+} feedback;
+
+void tela_Feedback(){
+
+    int i = 0, confirma;
+    char resp;
+
+    feedback *fb;
+
+    fb = malloc((50 * 2) * sizeof(feedback));
+
+    do{
+        system("cls");
+        printf("\nDigite a sua nota com relação aos seguintes tópicos: \n\n");
+        printf("Atendimento dos funcionários (1 a 10): \n");
+        scanf("%d", &(fb + i)->atnd_func);
+        printf("Consultas e/ou exames realizados (1 a 10): \n");
+        scanf("%d", &(fb + i)->atnd_consult);
+        printf("Preço das(os) consultas/exames (1 a 10): \n");
+        scanf("%d", &(fb + i)->preco_consult);
+        printf("Estabelecimento (conforto, iluminação, banheiro, etc...) (1 a 10): \n");
+        scanf("%d", &(fb + i)->estab);
+        fflush(stdin);
+        printf("Nos dê uma avaliação mais detalhada: \n");
+        gets((fb + i)->descri_feed);
+        i++;
+
+        //printf("Deseja realizar outro Feedback ? (S/N)\n");
+        //scanf("%c", &resp);
+
+		confirma = 0;
+
+        while(confirma == 0){
+            fflush(stdin);
+            printf("Deseja realizar outro Feedback ? (S/N)\n");
+            scanf("%c", &resp);
+
+            while((resp != 'N' && resp != 'n') && (resp != 'S' && resp != 's')){
+                printf("Escolha uma opção válida ! \n");
+                system("pause");
+                system("cls");
+                printf("Deseja realizar outro Feedback ? (S/N)\n");
+                scanf("%c", &resp);
+                fflush(stdin);
+            }
+            fflush(stdin);
+            confirma = 1;
+        }
+
+    } while(resp == 'S' || resp == 's');
+
+    printf("Obrigado pelo seu Feedback !");
+}
+
+void main () {
+
+    setlocale(LC_ALL, "Portuguese");
+
+    tela_Feedback();
+}
