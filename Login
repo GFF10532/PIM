@@ -1,1 +1,53 @@
-#include<math.h>
+#include <stdio.h>
+#include <locale.h>
+#include <string.h>
+#include<locale.h>
+
+void main() {
+
+    setlocale(LC_ALL, "Portuguese");
+
+    char senha[10], senha_cmp[10], login[20], resp;
+    int i, verifica_senha = 0, verifica_acesso = 0, a;
+
+    printf("É a sua primeira vez acessando o sistema ? (S/N)\n");
+    scanf("%c", &resp);
+
+    while (verifica_acesso == 0){
+        if (resp == 'S' || resp == 's'){
+            fflush(stdin);
+            printf("Cadastre uma senha de 6 dígitos:\n ");
+            gets(senha_cmp);
+            verifica_acesso = 1;
+        } else if (resp == 'N' || resp == 'n'){
+            printf("Prossiga com a sua senha cadastrada !\n");
+            verifica_acesso = 1;
+        } else {
+            printf("Opção Inválida ! Selecione uma opção válida ! \n");
+        }
+    }
+
+    while(verifica_senha == 0){
+        printf("\n\t\t Consultório Boa Saúde\n\n Login: ");
+        fflush(stdin);  //Limpando o buffer do teclado
+        gets(login);
+        printf("\n Senha: ");
+        gets(senha);
+        fflush(stdin);
+
+        a = strcmp(senha, senha_cmp);
+
+        if(a == 0){
+            printf("\nSENHA CORRETA\n");
+            verifica_senha = 1;
+
+            system("pause");
+        } else {
+            printf("\nSENHA ERRADA\n");
+
+            system("pause");
+        }
+
+        system("cls");
+    }
+}
