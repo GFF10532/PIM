@@ -63,7 +63,9 @@ typedef struct{
     char nome_paciente[25];
     char nome_medico[25];
     char tipo_consulta[50];
+    char pagar_como[50]; // pagar consulta com convenio ou particular ?
     char horario[15];
+    float preco_consulta;
 
 }consulta;
 
@@ -72,6 +74,8 @@ typedef struct{
     char data_exame[15];
     char nome[25];
     char tipo_exame[50];
+    float preco_exame;
+    char pagar_como_exame[50]; // pagar consulta com convenio ou particular ?
 
 } exame;
 
@@ -132,7 +136,12 @@ void menuConsulta(){
 }
 
 void marcaConsulta(consulta *c){
-    int i = 0;
+    int i = 0, tam;
+
+    printf("Deseja marcar quantas consultas ?\n");
+    scanf("%d", &tam);
+
+    for(i = 0; i < tam; i++){
 
     fflush(stdin);
     printf("Digite a data desejada para marcar a consulta [DD/MM/YYYY]: ");
@@ -143,10 +152,19 @@ void marcaConsulta(consulta *c){
     gets((c+i)->nome_medico);
     printf("É consulta ou retorno ? \n");
     gets((c+i)->tipo_consulta);
+    fflush(stdin);
+    printf("É particular ou tem convenio ? \n");
+    gets((c+i)->pagar_como);
+    fflush(stdin);
+    printf("Informe o valor da consulta: \nR$ ");
+    scanf("%f", &(c+i)->preco_consulta);
+    fflush(stdin);
     printf("Informe o horário da(o) consulta/retorno [00:00]: ");
     gets((c+i)->horario);
-    printf("Consulta marcada com sucesso ! \n");
     //funciona -->> printf("%s", (c+i)->nome_paciente->nome);
+    }
+
+    printf("Consulta marcada com sucesso ! \n");
 }
 
 void remarcaConsulta(consulta *c, char nome_consult[25]){
@@ -202,9 +220,18 @@ void marcaExame(exame *e){
         gets((e+i)->data_exame);
         printf("Informe o nome do paciente: ");
         gets((e+i)->nome);
-        printf("Exame marcado com sucesso ! \n");
+        printf("Informe do que será o exame : ");
+        gets((e+i)->tipo_exame);
+        printf("É particular ou tem convenio ? \n");
+        gets((e+i)->pagar_como_exame);
+        fflush(stdin);
+        printf("Informe o valor do exame: \nR$ ");
+        scanf("%f", &(e+i)->preco_exame);
+        fflush(stdin);
         //funciona -->> printf("%s", (c+i)->nome_paciente->nome);
     }
+
+    printf("Exame marcado com sucesso ! \n");
 }
 
 void remarcaExame(exame *e, char nome_exame[25]){
