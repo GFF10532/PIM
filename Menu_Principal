@@ -15,8 +15,6 @@ typedef struct{//Aqui definimos um tipo de dado do tipo funcionário
     int numero;
     char telefone[13];
     char email[40];
-    char doenca[70]; // Doença - Diagnóstico
-    char remedio[70]; /* Transformar esses campos em um só Remédios */
 
 }funcionario;
 
@@ -26,15 +24,12 @@ typedef struct{//Aqui definimos um tipo de dado do tipo médico
     int dataNascimento; // comentar com o Wisley como fazer esse dado
     char sexo[15];
     char estadoCivil[30];
-    float pesocliente;
     char endereco[70];
     char cidade[30];
     int long cep;
     int numero;
     char telefone[13];
     char email[40];
-    char doenca[70]; // Doença - Diagnóstico
-    char remedio[70]; /* Transformar esses campos em um só Remédios */
 
 }medico;
 
@@ -51,8 +46,6 @@ typedef struct{//Aqui definimos um tipo de dado do tipo paciente
     char numero;
     char telefone[13];
     char email[40];
-    char doenca[70]; // Doença - Diagnóstico
-    char remedio[70]; /* Transformar esses campos em um só Remédios */
 
 }paciente;
 
@@ -63,6 +56,14 @@ void menuPrincipal(){
    paciente *p;
    funcionario *f;
    medico *m;
+
+   printf("Digite quantos pacientes deseja cadastrar: ");
+   scanf("%d", &tam_p);
+   printf("Digite quantos funcionários deseja cadastrar: ");
+   scanf("%d", &tam_f);
+   printf("Digite quantos médicos deseja cadastrar: ");
+   scanf("%d", &tam_m);
+   system("cls");
 
    p = malloc(tam_p * sizeof(paciente));
    f = malloc(tam_f * sizeof(funcionario));
@@ -75,25 +76,29 @@ void menuPrincipal(){
 		printf("[2] Agendar/Cancelar Consulta\n");
 		printf("[3] Consultar Relatório \n");
 		printf("[4] Consultar dados \n");
-		printf("[5] Deslogar \n");
+		printf("[5] Avalie-nos ! \n");
+		printf("[6] Deslogar \n");
 		printf("Escolha uma opção: \n");
 		scanf("%d", &op);
 
         switch (op){
             case 1: system("cls");
-	    	    menuCadastro();
+                    //menuCadastro();
                     break;
             case 2: system("cls");
-	    	    menuAgendar();
+                    //menuAgendar();
                     break;
             case 3: system("cls");
-	    	    menuRelatorio();
+                    //menuRelatorio();
                     break;
             case 4: system("cls");
-	            menuConsulta();
+                    //menuConsulta();
                     break;
             case 5: system("cls");
-	            menuLogin();
+                    //telaFeedback();
+                    break;
+            case 6: system("cls");
+                    //telaFeedback();
                     break;
             default: printf("Opção inválida !\n");
                      break;
@@ -103,9 +108,9 @@ void menuPrincipal(){
         system("pause"); //ou getch()
 		system("cls"); //limpa a tela
 
-    } while (op != 5);
+    } while (op != 6);
 
-    printf("Boa Noite !");
+    printf("Adeus, até a próxima !");
 }
 
 
