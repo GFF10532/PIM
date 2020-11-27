@@ -66,6 +66,7 @@ typedef struct{
     char pagar_como[50]; // pagar consulta com convenio ou particular ?
     char horario[15];
     float preco_consulta;
+    int unidade;
 
 }consulta;
 
@@ -76,6 +77,7 @@ typedef struct{
     char tipo_exame[50];
     float preco_exame;
     char pagar_como_exame[50]; // pagar consulta com convenio ou particular ?
+    int unidade;
 
 } exame;
 
