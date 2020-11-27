@@ -1,0 +1,443 @@
+#include <stdio.h>
+#include <locale.h>
+
+typedef struct{
+
+    char data_consulta[15];
+    char nome_paciente[25];
+    char nome_medico[25];
+    char tipo_consulta[50];
+    char pagar_como[50]; // pagar consulta com convenio ou particular ?
+    char horario[15];
+    float preco_consulta;
+    int unidade;
+
+}consulta;
+
+typedef struct{
+
+    char data_exame[15];
+    char nome[25];
+    char tipo_exame[50];
+    float preco_exame;
+    char pagar_como_exame[50]; // pagar consulta com convenio ou particular ?
+    int unidade;
+
+} exame;
+
+typedef struct{//Aqui definimos um tipo de dado do tipo funcionário
+    char nome[40];
+    char cpf[15];
+    int dataNascimento; // comentar com o Wisley como fazer esse dado
+    char sexo[15];
+    char estadoCivil[30];
+    float pesocliente;
+    char endereco[70];
+    char cidade[30];
+    int long cep;
+    int numero;
+    char telefone[13];
+    char email[40];
+    char doenca[70]; // Doença - Diagnóstico
+    char remedio[70]; /* Transformar esses campos em um só Remédios */
+
+}funcionario;
+
+typedef struct{//Aqui definimos um tipo de dado do tipo médico
+    char nome[40];
+    char cpf[15];
+    int dataNascimento; // comentar com o Wisley como fazer esse dado
+    char sexo[15];
+    char estadoCivil[30];
+    float pesocliente;
+    char endereco[70];
+    char cidade[30];
+    int long cep;
+    int numero;
+    char telefone[13];
+    char email[40];
+    char doenca[70]; // Doença - Diagnóstico
+    char remedio[70]; /* Transformar esses campos em um só Remédios */
+
+}medico;
+
+typedef struct{//Aqui definimos um tipo de dado do tipo paciente
+    char nome[40];
+    char cpf[15];
+    char dataNascimento; // comentar com o Wisley como fazer esse dado
+    char sexo[15];
+    char estadoCivil[30];
+    float peso;
+    char endereco[70];
+    char cidade[30];
+    char cep;
+    char numero;
+    char telefone[13];
+    char email[40];
+    char doenca[70]; // Doença - Diagnóstico
+    char remedio[70]; /* Transformar esses campos em um só Remédios */
+    int unidade;
+
+}paciente;
+
+void menuRelatorio(){
+
+   int op, i, boolean = 0, tam_p, tam_f, tam_m;
+
+   paciente *p;
+   funcionario *f;
+   medico *m;
+   consulta *c;
+   exame *e;
+
+   p = malloc(tam_p * sizeof(paciente));
+   f = malloc(tam_f * sizeof(funcionario));
+   m = malloc(tam_m * sizeof(medico));
+   c = malloc(50 * sizeof(consulta));
+   e = malloc(50 * sizeof(exame));
+
+
+   do {
+
+        printf("\n*** Menu Relatório ***\n");
+		printf("[1] Pacientes cadastrados por unidade da rede \n");// criar unds diferentes e depois contar cada uma delas
+		printf("[2] Unidade da rede que mais atende\n"); // fazer uma comparação das redes
+		printf("[3] Totalização diária por unidade de rede \n"); // vai ser basicamente a mesma coisa, somar todos os gastos
+		printf("[4] Totalização mensal por unidade de rede \n"); // vai ser basicamente a mesma coisa // consulta talvez
+		printf("[5] Totalização das unidades da rede \n"); // somar todos os valores de cada unidade e depois somar
+		printf("[6] Voltar \n");
+		printf("Escolha uma opção: \n");
+		scanf("%d", &op);
+
+        switch (op){
+            case 1: retornaUnidade(p, tam_p);
+                    break;
+            case 2: retornaMaior(p, tam_p);
+                    break;
+            case 3: retornaValordiario(c, e, tam_p);
+                    break;
+            case 4: retornaValormensal(c, e, tam_p);
+                    break;
+            case 5: retornaTotal(c, e, tam_p);
+                    break;
+            case 6: printf("5");
+                    system("cls"); //limpa a tela
+                    break;
+            default: printf("Opção inválida !\n");
+                     break;
+
+        }
+
+        system("pause"); //ou getch()
+		system("cls"); //limpa a tela
+
+    } while (op != 6);
+}
+
+void retornaUnidade(paciente *p, int t){
+    int i, unidade_1 = 0, unidade_2 = 0, unidade_3 = 0;
+
+    for(i = 0; i < t; i++){
+        if((p+i)->unidade == 1){
+            unidade_1++;
+        } else if ((p+i)->unidade == 2){
+            unidade_2++;
+        } else if((p+i)->unidade == 3){
+            unidade_3++;
+        }
+    }
+
+    printf("A Unidade 1 contém %d pacientes cadastrados, a Unidade 2 contém %d pacientes cadastrados e a Unidade 3 contém %d pacientes cadastrados\n", unidade_1, unidade_2, unidade_3);
+
+    printf("\nSegue os pacientes da Unidade 1\n");
+
+    for(i = 0; i < t; i++){
+        if((p+i)->unidade == 1){
+            printf("Nome: %s\n", (p+i)->nome);
+            printf("CPF: %s\n", (p+i)->cpf);
+            printf("Data de Nascimento: %s\n", (p+i)->dataNascimento);
+            printf("Sexo: %s\n", (p+i)->sexo);
+            printf("Estado Civil: %s\n", (p+i)->estadoCivil);
+            printf("Peso: %.2f\n", (p+i)->peso);
+            printf("Endereço: %s\n", (p+i)->endereco);
+            printf("Cidade: %s\n", (p+i)->cidade);
+            printf("CEP: %s\n", (p+i)->cep);
+            printf("Número: %s\n", (p+i)->numero);
+            printf("Telefone: %s\n", (p+i)->telefone);
+            printf("E-mail: %s\n\n", (p+i)->email);
+        }
+    }
+
+        printf("\nSegue os pacientes da Unidade 2\n");
+
+    for(i = 0; i < t; i++){
+        if((p+i)->unidade == 2){
+            printf("Nome: %s\n", (p+i)->nome);
+            printf("CPF: %s\n", (p+i)->cpf);
+            printf("Data de Nascimento: %s\n", (p+i)->dataNascimento);
+            printf("Sexo: %s\n", (p+i)->sexo);
+            printf("Estado Civil: %s\n", (p+i)->estadoCivil);
+            printf("Peso: %.2f\n", (p+i)->peso);
+            printf("Endereço: %s\n", (p+i)->endereco);
+            printf("Cidade: %s\n", (p+i)->cidade);
+            printf("CEP: %s\n", (p+i)->cep);
+            printf("Número: %s\n", (p+i)->numero);
+            printf("Telefone: %s\n", (p+i)->telefone);
+            printf("E-mail: %s\n\n", (p+i)->email);
+        }
+    }
+
+        printf("\nSegue os pacientes da Unidade 1\n");
+
+    for(i = 0; i < t; i++){
+        if((p+i)->unidade == 3){
+            printf("Nome: %s\n", (p+i)->nome);
+            printf("CPF: %s\n", (p+i)->cpf);
+            printf("Data de Nascimento: %s\n", (p+i)->dataNascimento);
+            printf("Sexo: %s\n", (p+i)->sexo);
+            printf("Estado Civil: %s\n", (p+i)->estadoCivil);
+            printf("Peso: %.2f\n", (p+i)->peso);
+            printf("Endereço: %s\n", (p+i)->endereco);
+            printf("Cidade: %s\n", (p+i)->cidade);
+            printf("CEP: %s\n", (p+i)->cep);
+            printf("Número: %s\n", (p+i)->numero);
+            printf("Telefone: %s\n", (p+i)->telefone);
+            printf("E-mail: %s\n\n", (p+i)->email);
+        }
+    }
+}
+
+void retornaMaior (paciente *p, int t){
+    int i, unidade_1 = 0, unidade_2 = 0, unidade_3 = 0;
+
+    for(i = 0; i < t; i++){
+        if((p+i)->unidade == 1){
+            unidade_1++;
+        } else if ((p+i)->unidade == 2){
+            unidade_2++;
+        } else if ((p+i)->unidade == 3){
+            unidade_3++;
+        }
+    }
+
+    if (unidade_1 > unidade_2 && unidade_1 > unidade_3){ // 3 > 0 / 3 > 2
+        printf("A Unidade que mais atende é a Unidade 1.\n");
+    } else if (unidade_2 > unidade_3) {
+        printf("A Unidade que mais atende é a Unidade 2.\n");
+    } else {
+        printf("A Unidade que mais atende é a Unidade 3.\n");
+    }
+}
+
+void retornaValordiario(consulta *c, exame *e, int t){
+
+    system("cls");
+
+    int i, op, checou = 0;
+    float soma_c1 = 0, soma_c2 = 0, soma_c3 = 0, soma_e1 = 0, soma_e2 = 0, soma_e3 = 0, soma_t1 = 0, soma_t2 = 0, soma_t3 = 0;
+
+    do{
+
+        printf("\n Selecione uma Unidade para consulta da renda diária \n");
+		printf("[1] Unidade 1 \n");// criar unds diferentes e depois contar cada uma delas
+		printf("[2] Unidade 2 \n"); // fazer uma comparação das redes
+		printf("[3] Unidade 3 \n");// vai ser basicamente a mesma coisa, somar todos os gastos
+		printf("[4] Voltar \n");
+		printf("Escolha uma opção: \n");
+		scanf("%d", &op);
+
+        switch (op){
+            case 1:soma_t1 = 0;
+                   soma_c1 = 0;
+                   soma_e1 = 0;
+                   for(i = 0; i < t; i++){
+                        if((c+i)->unidade == 1){
+                            soma_c1 = soma_c1 + (c+i)->preco_consulta; // 20
+
+                        }
+                        if((e+i)->unidade == 1) {
+                            soma_e1 = soma_e1 + (e+i)->preco_exame;
+                        }
+
+                        soma_t1 = soma_c1 + soma_e1;
+                    }
+
+                    printf("A Unidade 1 teve um total de R$ %.2f neste mês.\n", soma_t1);
+                    break;
+            case 2: soma_t2 = 0;
+                    soma_c2 = 0;
+                    soma_e2 = 0;
+                   for(i = 0; i < t; i++){
+                        if((c+i)->unidade == 2){
+                            soma_c2 = soma_c2 + (c+i)->preco_consulta;
+
+                        }
+                        if((e+i)->unidade == 2) {
+                            soma_e2 = soma_e2 + (e+i)->preco_exame;
+                        }
+
+                        soma_t2 = soma_c2 + soma_e2;
+
+                    }
+
+                    printf("A Unidade 2 teve um total de R$ %.2f neste mês.\n", soma_t2);
+                    break;
+            case 3: soma_t3 = 0;
+                    soma_c3 = 0;
+                    soma_e3 = 0;
+                    for(i = 0; i < t; i++){
+                        if((c+i)->unidade == 3){
+                            soma_c3 = soma_c3 + (c+i)->preco_consulta;
+                        }
+                        if((e+i)->unidade == 3) {
+                            soma_e3 = soma_e3 + (e+i)->preco_exame;
+                        }
+
+                        soma_t3 = soma_c3 + soma_e3;
+
+                    }
+
+                    printf("A Unidade 3 teve um total de R$ %.2f neste mês.\n", soma_t3);
+                    break;
+            case 4: system("cls");
+                    //menuPrincipal(); //limpa a tela
+                    break;
+            default: printf("Opção inválida !\n");
+                     break;
+
+        }
+
+        system("pause"); //ou getch()
+		system("cls"); //limpa a tela
+
+    } while(op != 4);
+}
+
+void retornaValormensal(consulta *c, exame *e, int t){
+
+    system("cls");
+
+    int i, op;
+    float soma_c1 = 0, soma_c2 = 0, soma_c3 = 0, soma_e1 = 0, soma_e2 = 0, soma_e3 = 0, soma_t1 = 0, soma_t2 = 0, soma_t3 = 0;
+
+    do{
+
+        printf("\n Selecione uma Unidade para consulta da renda mensal \n");
+		printf("[1] Unidade 1 \n");// criar unds diferentes e depois contar cada uma delas
+		printf("[2] Unidade 2 \n"); // fazer uma comparação das redes
+		printf("[3] Unidade 3 \n");// vai ser basicamente a mesma coisa, somar todos os gastos
+		printf("[4] Voltar \n");
+		printf("Escolha uma opção: \n");
+		scanf("%d", &op);
+
+        switch (op){
+            case 1: soma_t1 = 0;
+                    soma_c1 = 0;
+                    soma_e1 = 0;
+                    for(i = 0; i < t; i++){
+                        if((c+i)->unidade == 1){
+                            soma_c1 = soma_c1 + (c+i)->preco_consulta;
+
+                        }
+                        if((e+i)->unidade == 1) {
+                            soma_e1 = soma_e1 + (e+i)->preco_exame;
+                        }
+
+                        soma_t1 = soma_c1 + soma_e1;
+                    }
+
+                    printf("A Unidade 1 teve um total de R$ %.2f neste mês.\n", soma_t1);
+                    break;
+            case 2: soma_t2 = 0;
+                    soma_c2 = 0;
+                    soma_e2 = 0;
+                    for(i = 0; i < t; i++){
+                        if((c+i)->unidade == 2){
+                            soma_c2 = soma_c2 + (c+i)->preco_consulta;
+
+                        }
+                        if((e+i)->unidade == 2) {
+                            soma_e2 = soma_e2 + (e+i)->preco_exame;
+                        }
+
+                        soma_t2 = soma_c2 + soma_e2;
+
+                    }
+
+                    printf("A Unidade 2 teve um total de R$ %.2f neste mês.\n", soma_t2);
+                    break;
+            case 3: soma_t3 = 0;
+                    soma_c3 = 0;
+                    soma_e3 = 0;
+                    for(i = 0; i < t; i++){
+                        if((c+i)->unidade == 3){
+                            soma_c3 = soma_c3 + (c+i)->preco_consulta;
+                        }
+                        if((e+i)->unidade == 3) {
+                            soma_e3 = soma_e3 + (e+i)->preco_exame;
+                        }
+
+                        soma_t3 = soma_c3 + soma_e3;
+
+                    }
+
+                    printf("A Unidade 3 teve um total de R$ %.2f neste mês.\n", soma_t3);
+                    break;
+            case 4: system("cls");
+                    //menuPrincipal(); //limpa a tela
+                    break;
+            default: printf("Opção inválida !\n");
+                     break;
+
+        }
+
+        system("pause"); //ou getch()
+		system("cls"); //limpa a tela
+
+    } while(op != 4);
+}
+
+void retornaTotal (consulta *c, exame *e, int t){
+
+    int i;
+    float soma_c1 = 0, soma_c2 = 0, soma_c3 = 0, soma_e1 = 0, soma_e2 = 0, soma_e3 = 0, soma_t1 = 0, soma_t2 = 0, soma_t3 = 0, soma_T;
+
+    for(i = 0; i < t; i++){
+        if((c+i)->unidade == 3){
+            soma_c3 = soma_c3 + (c+i)->preco_consulta;
+        }
+        if((e+i)->unidade == 3) {
+            soma_e3 = soma_e3 + (e+i)->preco_exame;
+        }
+
+        if((c+i)->unidade == 2){
+            soma_c2 = soma_c2 + (c+i)->preco_consulta;
+        }
+        if((e+i)->unidade == 2) {
+            soma_e2 = soma_e2 + (e+i)->preco_exame;
+        }
+
+        if((c+i)->unidade == 1){
+            soma_c3 = soma_c3 + (c+i)->preco_consulta;
+        }
+        if((e+i)->unidade == 1) {
+            soma_e1 = soma_e1 + (e+i)->preco_exame;
+        }
+        soma_t1 = soma_c1 + soma_e1;
+        soma_t2 = soma_c2 + soma_e2;
+        soma_t3 = soma_c3 + soma_e3;
+    }
+
+
+    soma_T = soma_t1 + soma_t2 + soma_t3;
+
+    printf("Todas as Unidades tiveram um lucro total somado de R$ %.2f .\n", soma_T);
+
+}
+
+void main () {
+
+    setlocale(LC_ALL, "Portuguese");
+
+    menuRelatorio();
+}
