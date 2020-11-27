@@ -15,7 +15,7 @@ void main() {
     while (verifica_acesso == 0){
         if (resp == 'S' || resp == 's'){
             fflush(stdin);
-            printf("Cadastre uma senha de 6 dígitos:\n ");
+            printf("Cadastre uma senha de 6 dígitos: ");
             gets(senha_cmp);
             verifica_acesso = 1;
         } else if (resp == 'N' || resp == 'n'){
