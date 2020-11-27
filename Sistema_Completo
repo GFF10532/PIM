@@ -1,0 +1,972 @@
+#include <stdio.h>
+#include <locale.h>
+#include <string.h>
+#include <stdlib.h>
+
+typedef struct{//Aqui definimos um tipo de dado do tipo funcionário
+    char nome[40];
+    char cpf[15];
+    int dataNascimento; // comentar com o Wisley como fazer esse dado
+    char sexo[15];
+    char estadoCivil[30];
+    char tipoFuncionario[30];
+    char endereco[70];
+    char cidade[30];
+    int long cep;
+    int numero;
+    char telefone[13];
+    char email[40];
+    int unidade;
+
+}funcionario;
+
+typedef struct{//Aqui definimos um tipo de dado do tipo médico
+    char nome[40];
+    char cpf[15];
+    int dataNascimento; // comentar com o Wisley como fazer esse dado
+    char sexo[15];
+    char estadoCivil[30];
+    char endereco[70];
+    char cidade[30];
+    int long cep;
+    int numero;
+    char telefone[13];
+    char email[40];
+    int unidade;
+
+}medico;
+
+typedef struct{//Aqui definimos um tipo de dado do tipo paciente
+    char nome[40];
+    char cpf[15];
+    char dataNascimento; // comentar com o Wisley como fazer esse dado
+    char sexo[15];
+    char estadoCivil[30];
+    float peso;
+    char endereco[70];
+    char cidade[30];
+    char cep;
+    char numero;
+    char telefone[13];
+    char email[40];
+    int unidade;
+
+}paciente;
+
+typedef struct{
+
+    char data_consulta[15];
+    char nome_paciente[25];
+    char nome_medico[25];
+    char tipo_consulta[50];
+    char pagar_como[50]; // pagar consulta com convenio ou particular ?
+    char horario[15];
+    float preco_consulta;
+    int unidade;
+
+}consulta;
+
+typedef struct{
+
+    char data_exame[15];
+    char nome[25];
+    char tipo_exame[50];
+    float preco_exame;
+    char pagar_como_exame[50]; // pagar consulta com convenio ou particular ?
+    int unidade;
+
+} exame;
+
+typedef struct{
+
+    int atnd_func;
+    int atnd_consult;
+    int preco_consult;
+    int estab;
+    char descri_feed[50];
+
+} feedback;
+
+void telaLogin(){
+
+    char senha[10], senha_cmp[10], login[20], resp;
+    int i, verifica_senha = 0, verifica_acesso = 0, a;
+
+    printf("É a sua primeira vez acessando o sistema ? (S/N)\n");
+    scanf("%c", &resp);
+
+    while (verifica_acesso == 0){
+        if (resp == 'S' || resp == 's'){
+            fflush(stdin);
+            printf("Cadastre uma senha de 6 dígitos: ");
+            gets(senha_cmp);
+            verifica_acesso = 1;
+        } else if (resp == 'N' || resp == 'n'){
+            printf("Prossiga com a sua senha cadastrada !\n");
+            verifica_acesso = 1;
+        } else {
+            printf("Opção Inválida ! Selecione uma opção válida ! \n");
+        }
+    }
+
+    while(verifica_senha == 0){
+        printf("\n\t\t Consultório Boa Saúde\n\n Login: ");
+        fflush(stdin);  //Limpando o buffer do teclado
+        gets(login);
+        printf("\n Senha: ");
+        gets(senha);
+        fflush(stdin);
+
+        a = strcmp(senha, senha_cmp);
+
+        if(a == 0){
+            printf("\nSENHA CORRETA\n");
+            verifica_senha = 1;
+
+            system("pause");
+        } else {
+            printf("\nSENHA ERRADA\n");
+
+            system("pause");
+        }
+
+        system("cls");
+    }
+
+    menuPrincipal();
+}
+
+void menuPrincipal(){
+
+   int op, boolean = 0;
+
+   paciente *p;
+   funcionario *f;
+   medico *m;
+   consulta *c;
+   exame *e;
+   feedback *fb;
+
+   do {
+
+        printf("\n*** Menu Principal ***\n");
+		printf("[1] Cadastrar no Sistema \n");
+		printf("[2] Agendar/Remarcar Consulta\n");
+		printf("[3] Consultar Relatório \n");
+		printf("[4] Avalie-nos ! \n");
+		printf("[5] Deslogar \n");
+		printf("Escolha uma opção: \n");
+		scanf("%d", &op);
+
+        switch (op){
+            case 1: system("cls");
+                    menuCadastro(p, f, m);
+                    break;
+            case 2: system("cls");
+                    menuConsulta(p, f, m, c, e);
+                    break;
+            case 3: system("cls");
+                    menuRelatorio(p, c, e);
+                    break;
+            case 4: system("cls");
+                    telaFeedback(fb);
+                    break;
+            case 5: system("cls");
+                    break;
+            default: printf("Opção inválida !\n");
+                     break;
+
+        }
+
+        system("pause"); //ou getch()
+		system("cls"); //limpa a tela
+
+    } while (op != 5);
+
+    printf("Adeus, até a próxima !");
+    free(p);
+    free(f);
+    free(m);
+    free(c);
+    free(e);
+    free(fb);
+}
+
+void menuCadastro(paciente *p, funcionario *f, medico *m){
+
+    int op, tam_p, tam_f, tam_m;
+
+
+    p = malloc(tam_p * sizeof(paciente));
+    f = malloc(tam_f * sizeof(funcionario));
+    m = malloc(tam_m * sizeof(medico));
+
+    do{
+        printf("\n*** Menu de Cadastro ***\n");
+		printf("[1] Cadastrar Paciente \n");
+		printf("[2] Cadastrar Médico \n");
+		printf("[3] Cadastrar Funcionário \n");
+		printf("[4] Voltar \n");
+		printf("Escolha uma opção: \n");
+		scanf("%d", &op);
+
+        switch (op){
+            case 1: printf("Digite quantos pacientes deseja cadastrar: \n");
+                    scanf("%d", &tam_p);
+                    cadastraPaciente(p, tam_p);
+                    break;
+            case 2: printf("Digite quantos médicos deseja cadastrar: \n");
+                    scanf("%d", &tam_m);
+                    cadastraMedico(m);
+                    break;
+            case 3: printf("Digite quantos funcionários deseja cadastrar: \n");
+                    scanf("%d", &tam_f);
+                    cadastraMedico(f);
+                    break;
+            case 4: system("cls");
+                    menuPrincipal();
+                    break;
+
+        }
+
+        system("pause"); //ou getch()
+		system("cls"); //limpa a tela
+
+    } while (op != 4);
+}
+
+void cadastraPaciente(paciente *p, int tp){
+    int i;
+
+    for (i = 0; i < tp; i++){
+        fflush(stdin);
+        printf("Informe o Nome do paciente: ");
+        gets((p+i)->nome); //
+        fflush(stdin);
+        printf("Informe o CPF: ");
+        gets((p+i)->cpf);
+        fflush(stdin);
+        printf("Informe a data de nascimento: ");
+        scanf("%d", &(p+i)->dataNascimento);
+        fflush(stdin);
+        printf("Informe o sexo: ");
+        gets((p+i)->sexo);
+        fflush(stdin);
+        printf("Informe estado civil: ");
+        gets((p+i)->estadoCivil);
+        fflush(stdin);
+        printf("Digite o peço do paciente: ");
+        scanf("%f", &(p+i)->peso);
+        fflush(stdin);
+        printf("Digite endereço do paciente: ");
+        gets((p+i)->endereco);
+        fflush(stdin);
+        printf("Informe número: ");
+        scanf("%d", &(p+i)->numero);
+        fflush(stdin);
+        printf("Informe a cidade: ");
+        gets((p+i)->cidade);
+        fflush(stdin);
+        printf("Informe o CEP: ");
+        scanf("%d", &(p+i)->cep);
+        fflush(stdin);
+        printf("Informe o telefone: ");
+        gets((p+i)->telefone);
+        fflush(stdin);
+        printf("Informe o E-mail: ");
+        gets((p+i)->email);
+        fflush(stdin);
+        printf("Informe a Unidade do paciente: ");
+        scanf("%d", &(p+i)->unidade);
+        fflush(stdin);
+    }
+
+    printf("Cadastro feito com Sucesso !");
+}
+
+void cadastraFuncionario(funcionario *f, int tf){
+    int i;
+
+    for (i = 0; i < tf; i++){
+        fflush(stdin);
+        printf("Informe o Nome do funcionário: ");
+        gets((f+i)->nome); //
+        fflush(stdin);
+        printf("Informe o CPF: ");
+        gets((f+i)->cpf);
+        fflush(stdin);
+        printf("Informe a data de nascimento: ");
+        scanf("%d", &(f+i)->dataNascimento);
+        fflush(stdin);
+        printf("Informe o sexo: ");
+        gets((f+i)->sexo);
+        fflush(stdin);
+        printf("Informe estado civil: ");
+        gets((f+i)->estadoCivil);
+        fflush(stdin);
+        printf("Digite a funçao do funcionário: ");
+        gets((f+i)->tipoFuncionario);
+        fflush(stdin);
+        printf("Digite endereço do funcionário: ");
+        gets((f+i)->endereco);
+        fflush(stdin);
+        printf("Informe número: ");
+        scanf("%d", &(f+i)->numero);
+        fflush(stdin);
+        printf("Informe a cidade: ");
+        gets((f+i)->cidade);
+        fflush(stdin);
+        printf("Informe o CEP: ");
+        scanf("%d", &(f+i)->cep);
+        fflush(stdin);
+        printf("Informe o telefone: ");
+        gets((f+i)->telefone);
+        fflush(stdin);
+        printf("Informe o E-mail: ");
+        gets((f+i)->email);
+        fflush(stdin);
+        printf("Informe a Unidade do funcionário: ");
+        scanf("%d", &(f+i)->unidade);
+        fflush(stdin);
+    }
+
+    printf("Cadastro feito com Sucesso !");
+}
+
+void cadastraMedico(medico *m, int tm){
+    int i;
+
+    for (i = 0; i < tm; i++){
+        fflush(stdin);
+        printf("Informe o Nome do médico: ");
+        gets((m+i)->nome); //
+        fflush(stdin);
+        printf("Informe o CPF: ");
+        gets((m+i)->cpf);
+        fflush(stdin);
+        printf("Informe a data de nascimento: ");
+        scanf("%d", &(m+i)->dataNascimento);
+        fflush(stdin);
+        printf("Informe o sexo: ");
+        gets((m+i)->sexo);
+        fflush(stdin);
+        printf("Informe estado civil: ");
+        gets((m+i)->estadoCivil);
+        fflush(stdin);
+        printf("Digite endereço do médico: ");
+        gets((m+i)->endereco);
+        fflush(stdin);
+        printf("Informe número: ");
+        scanf("%d", &(m+i)->numero);
+        fflush(stdin);
+        printf("Informe a cidade: ");
+        gets((m+i)->cidade);
+        fflush(stdin);
+        printf("Informe o CEP: ");
+        scanf("%d", &(m+i)->cep);
+        fflush(stdin);
+        printf("Informe o telefone: ");
+        gets((m+i)->telefone);
+        fflush(stdin);
+        printf("Informe o E-mail: ");
+        gets((m+i)->email);
+        fflush(stdin);
+        printf("Informe a Unidade do médico: ");
+        scanf("%d", &(m+i)->unidade);
+        fflush(stdin);
+    }
+
+    printf("Cadastro feito com Sucesso !");
+}
+
+void menuConsulta(paciente *p, funcionario *f, medico *m, consulta *c, exame *e){
+
+   int op, i, boolean = 0, tam_c, tam_e;
+   char nome_consult[25], nome_exame[25];
+
+   printf("Quantas Consultas em média o consultório possui ?");
+   scanf("%d", &tam_c);
+
+   printf("Quantos Exames em média o consultório ?");
+   scanf("%d", &tam_e);
+
+   c = malloc(tam_c * sizeof(consulta));
+   e = malloc(tam_e * sizeof(exame));
+
+   do{
+        printf("\n*** Menu de Consulta ***\n");
+        printf("[1] Agendar Consulta \n");
+        printf("[2] Remarcar Consulta \n");
+        printf("[3] Agendar Exame \n");
+        printf("[4] Remarcar Exame \n");
+        printf("[5] Voltar \n");
+        printf("Escolha uma opção: \n");
+		scanf("%d", &op);
+
+        switch (op){
+            case 1: marcaConsulta(c);
+                    break;
+            case 2: fflush(stdin);
+                    printf("Digite o nome do paciente: ");
+                    gets(nome_consult);
+                    remarcaConsulta(c, nome_consult);
+                    break;
+            case 3: marcaExame(e);
+                    break;
+            case 4: fflush(stdin);
+                    printf("Digite o nome do paciente: ");
+                    gets(nome_exame);
+                    remarcaExame(e, nome_exame);
+                    break;
+            case 5: system("cls");
+                    menuPrincipal();
+                    break;
+            default: printf("Opção inválida !\n");
+                     break;
+
+        }
+
+        system("pause"); //ou getch()
+		system("cls"); //limpa a tela
+
+   } while (op != 5);
+}
+
+void marcaConsulta(consulta *c){
+    int i = 0, tam;
+
+    printf("Deseja marcar quantas consultas ?\n");
+    scanf("%d", &tam);
+
+    for(i = 0; i < tam; i++){
+
+    fflush(stdin);
+    printf("Digite a data desejada para marcar a consulta [DD/MM/YYYY]: ");
+    gets((c+i)->data_consulta);
+    printf("Informe o nome do paciente: ");
+    gets((c+i)->nome_paciente);
+    printf("Informe o nome médico: ");
+    gets((c+i)->nome_medico);
+    printf("É consulta ou retorno ? \n");
+    gets((c+i)->tipo_consulta);
+    fflush(stdin);
+    printf("É particular ou tem convenio ? \n");
+    gets((c+i)->pagar_como);
+    fflush(stdin);
+    printf("Informe o valor da consulta: \nR$ ");
+    scanf("%f", &(c+i)->preco_consulta);
+    fflush(stdin);
+    printf("Informe o horário da(o) consulta/retorno [00:00]: ");
+    gets((c+i)->horario);
+    //funciona -->> printf("%s", (c+i)->nome_paciente->nome);
+    }
+
+    printf("Consulta marcada com sucesso ! \n");
+}
+
+void remarcaConsulta(consulta *c, char nome_consult[25]){
+
+    int i, boolean = 0, achou = 0;
+    char op;
+
+    strlwr(nome_consult);
+
+    for (i = 0; i < 50; i++){
+        if (strcmp(strlwr((c+i)->nome_paciente), nome_consult) == 0){ // compara se as duas strings são iguais ana == ana
+            achou = 1;
+            break;
+        }
+    }
+
+    while (boolean == 0) {
+        if (achou == 1) {
+            fflush(stdin);
+            printf("O paciente possui uma consulta marcada na data %s \n", (c+i)->data_consulta);
+            printf("Deseja mudar a data atual ? S ou N ? \n");
+            scanf("%c", &op);
+            if((op != 'N' && op != 'n') && (op != 'S' && op != 's')){
+                printf("Escolha uma opção válida ! \n");
+            } else if (op == 'S' || op == 's') {
+                fflush(stdin);
+                printf("Digite a nova data: ");
+                gets((c+i)->data_consulta);
+                fflush(stdin);
+                printf("Data Alterada com sucesso ! \n");
+                boolean = 1;
+            } else {
+                printf("A Data escolhida foi mantida ! \n");
+                getch();
+                boolean = 1;
+            }
+        } else {
+            printf("Paciente não encontrado !\n");
+            boolean = 1;
+        }
+    }
+}
+
+void marcaExame(exame *e){
+    int i = 0, tam;
+
+    printf("Deseja marcar quantos exames ?\n");
+    scanf("%d", &tam);
+
+    for(i = 0; i < tam; i++){
+        fflush(stdin);
+        printf("Digite a data desejada para marcar o exame [DD/MM/YYYY]: ");
+        gets((e+i)->data_exame);
+        printf("Informe o nome do paciente: ");
+        gets((e+i)->nome);
+        printf("Informe do que será o exame : ");
+        gets((e+i)->tipo_exame);
+        printf("É particular ou tem convenio ? \n");
+        gets((e+i)->pagar_como_exame);
+        fflush(stdin);
+        printf("Informe o valor do exame: \nR$ ");
+        scanf("%f", &(e+i)->preco_exame);
+        fflush(stdin);
+        //funciona -->> printf("%s", (c+i)->nome_paciente->nome);
+    }
+
+    printf("Exame marcado com sucesso ! \n");
+}
+
+void remarcaExame(exame *e, char nome_exame[25]){
+    int i, boolean = 0, achou = 0;
+    char op;
+
+    strlwr(nome_exame);
+
+    for (i = 0; i < 50; i++){
+        if (strcmp(strlwr((e+i)->nome), nome_exame) == 0){ // compara se as duas strings são iguais ana == ana
+            achou = 1;
+            break;
+        }
+    }
+
+    while (boolean == 0) {
+        if (achou == 1) {
+            fflush(stdin);
+            printf("O paciente possui um exame marcado na data %s \n", (e+i)->data_exame);
+            printf("Deseja mudar a data atual ? S ou N ? \n");
+            scanf("%c", &op);
+            if((op != 'N' && op != 'n') && (op != 'S' && op != 's')){
+                printf("Escolha uma opção válida ! \n");
+            } else if (op == 'S' || op == 's') {
+                fflush(stdin);
+                printf("Digite a nova data: ");
+                gets((e+i)->data_exame);
+                fflush(stdin);
+                printf("Data Alterada com sucesso ! \n");
+                boolean = 1;
+            } else {
+                printf("A Data escolhida foi mantida ! \n");
+                getch();
+                boolean = 1;
+            }
+        } else {
+            printf("Paciente não encontrado !\n");
+            boolean = 1;
+        }
+    }
+}
+
+void menuRelatorio(paciente *p, consulta *c, exame *e){
+
+   int op, i, boolean = 0, tam_p, tam_f, tam_m;
+
+
+   do {
+
+        printf("\n*** Menu Relatório ***\n");
+		printf("[1] Pacientes cadastrados por unidade da rede \n");// criar unds diferentes e depois contar cada uma delas
+		printf("[2] Unidade da rede que mais atende\n"); // fazer uma comparação das redes
+		printf("[3] Totalização diária por unidade de rede \n"); // vai ser basicamente a mesma coisa, somar todos os gastos
+		printf("[4] Totalização mensal por unidade de rede \n"); // vai ser basicamente a mesma coisa // consulta talvez
+		printf("[5] Totalização das unidades da rede \n"); // somar todos os valores de cada unidade e depois somar
+		printf("[6] Voltar \n");
+		printf("Escolha uma opção: \n");
+		scanf("%d", &op);
+
+        switch (op){
+            case 1: retornaUnidade(p, tam_p);
+                    break;
+            case 2: retornaMaior(p, tam_p);
+                    break;
+            case 3: retornaValordiario(c, e, tam_p);
+                    break;
+            case 4: retornaValormensal(c, e, tam_p);
+                    break;
+            case 5: retornaTotal(c, e, tam_p);
+                    break;
+            case 6: system("cls");
+                    menuPrincipal();
+                    break;
+            default: printf("Opção inválida !\n");
+                     break;
+
+        }
+
+        system("pause"); //ou getch()
+		system("cls"); //limpa a tela
+
+    } while (op != 6);
+}
+
+void retornaUnidade(paciente *p, int t){
+    int i, unidade_1 = 0, unidade_2 = 0, unidade_3 = 0;
+
+    for(i = 0; i < t; i++){
+        if((p+i)->unidade == 1){
+            unidade_1++;
+        } else if ((p+i)->unidade == 2){
+            unidade_2++;
+        } else if((p+i)->unidade == 3){
+            unidade_3++;
+        }
+    }
+
+    printf("A Unidade 1 contém %d pacientes cadastrados, a Unidade 2 contém %d pacientes cadastrados e a Unidade 3 contém %d pacientes cadastrados\n", unidade_1, unidade_2, unidade_3);
+
+    printf("\nSegue os pacientes da Unidade 1\n");
+
+    for(i = 0; i < t; i++){
+        if((p+i)->unidade == 1){
+            printf("Nome: %s\n", (p+i)->nome);
+            printf("CPF: %s\n", (p+i)->cpf);
+            printf("Data de Nascimento: %s\n", (p+i)->dataNascimento);
+            printf("Sexo: %s\n", (p+i)->sexo);
+            printf("Estado Civil: %s\n", (p+i)->estadoCivil);
+            printf("Peso: %.2f\n", (p+i)->peso);
+            printf("Endereço: %s\n", (p+i)->endereco);
+            printf("Cidade: %s\n", (p+i)->cidade);
+            printf("CEP: %s\n", (p+i)->cep);
+            printf("Número: %s\n", (p+i)->numero);
+            printf("Telefone: %s\n", (p+i)->telefone);
+            printf("E-mail: %s\n\n", (p+i)->email);
+        }
+    }
+
+        printf("\nSegue os pacientes da Unidade 2\n");
+
+    for(i = 0; i < t; i++){
+        if((p+i)->unidade == 2){
+            printf("Nome: %s\n", (p+i)->nome);
+            printf("CPF: %s\n", (p+i)->cpf);
+            printf("Data de Nascimento: %s\n", (p+i)->dataNascimento);
+            printf("Sexo: %s\n", (p+i)->sexo);
+            printf("Estado Civil: %s\n", (p+i)->estadoCivil);
+            printf("Peso: %.2f\n", (p+i)->peso);
+            printf("Endereço: %s\n", (p+i)->endereco);
+            printf("Cidade: %s\n", (p+i)->cidade);
+            printf("CEP: %s\n", (p+i)->cep);
+            printf("Número: %s\n", (p+i)->numero);
+            printf("Telefone: %s\n", (p+i)->telefone);
+            printf("E-mail: %s\n\n", (p+i)->email);
+        }
+    }
+
+        printf("\nSegue os pacientes da Unidade 1\n");
+
+    for(i = 0; i < t; i++){
+        if((p+i)->unidade == 3){
+            printf("Nome: %s\n", (p+i)->nome);
+            printf("CPF: %s\n", (p+i)->cpf);
+            printf("Data de Nascimento: %s\n", (p+i)->dataNascimento);
+            printf("Sexo: %s\n", (p+i)->sexo);
+            printf("Estado Civil: %s\n", (p+i)->estadoCivil);
+            printf("Peso: %.2f\n", (p+i)->peso);
+            printf("Endereço: %s\n", (p+i)->endereco);
+            printf("Cidade: %s\n", (p+i)->cidade);
+            printf("CEP: %s\n", (p+i)->cep);
+            printf("Número: %s\n", (p+i)->numero);
+            printf("Telefone: %s\n", (p+i)->telefone);
+            printf("E-mail: %s\n\n", (p+i)->email);
+        }
+    }
+}
+
+void retornaMaior (paciente *p, int t){
+    int i, unidade_1 = 0, unidade_2 = 0, unidade_3 = 0;
+
+    for(i = 0; i < t; i++){
+        if((p+i)->unidade == 1){
+            unidade_1++;
+        } else if ((p+i)->unidade == 2){
+            unidade_2++;
+        } else if ((p+i)->unidade == 3){
+            unidade_3++;
+        }
+    }
+
+    if (unidade_1 > unidade_2 && unidade_1 > unidade_3){ // 3 > 0 / 3 > 2
+        printf("A Unidade que mais atende é a Unidade 1.\n");
+    } else if (unidade_2 > unidade_3) {
+        printf("A Unidade que mais atende é a Unidade 2.\n");
+    } else {
+        printf("A Unidade que mais atende é a Unidade 3.\n");
+    }
+}
+
+void retornaValordiario(consulta *c, exame *e, int t){
+
+    system("cls");
+
+    int i, op, checou = 0;
+    float soma_c1 = 0, soma_c2 = 0, soma_c3 = 0, soma_e1 = 0, soma_e2 = 0, soma_e3 = 0, soma_t1 = 0, soma_t2 = 0, soma_t3 = 0;
+
+    do{
+
+        printf("\n Selecione uma Unidade para consulta da renda diária \n");
+		printf("[1] Unidade 1 \n");// criar unds diferentes e depois contar cada uma delas
+		printf("[2] Unidade 2 \n"); // fazer uma comparação das redes
+		printf("[3] Unidade 3 \n");// vai ser basicamente a mesma coisa, somar todos os gastos
+		printf("[4] Voltar \n");
+		printf("Escolha uma opção: \n");
+		scanf("%d", &op);
+
+        switch (op){
+            case 1:soma_t1 = 0;
+                   soma_c1 = 0;
+                   soma_e1 = 0;
+                   for(i = 0; i < t; i++){
+                        if((c+i)->unidade == 1){
+                            soma_c1 = soma_c1 + (c+i)->preco_consulta; // 20
+
+                        }
+                        if((e+i)->unidade == 1) {
+                            soma_e1 = soma_e1 + (e+i)->preco_exame;
+                        }
+
+                        soma_t1 = soma_c1 + soma_e1;
+                    }
+
+                    printf("A Unidade 1 teve um total de R$ %.2f neste mês.\n", soma_t1);
+                    break;
+            case 2: soma_t2 = 0;
+                    soma_c2 = 0;
+                    soma_e2 = 0;
+                   for(i = 0; i < t; i++){
+                        if((c+i)->unidade == 2){
+                            soma_c2 = soma_c2 + (c+i)->preco_consulta;
+
+                        }
+                        if((e+i)->unidade == 2) {
+                            soma_e2 = soma_e2 + (e+i)->preco_exame;
+                        }
+
+                        soma_t2 = soma_c2 + soma_e2;
+
+                    }
+
+                    printf("A Unidade 2 teve um total de R$ %.2f neste mês.\n", soma_t2);
+                    break;
+            case 3: soma_t3 = 0;
+                    soma_c3 = 0;
+                    soma_e3 = 0;
+                    for(i = 0; i < t; i++){
+                        if((c+i)->unidade == 3){
+                            soma_c3 = soma_c3 + (c+i)->preco_consulta;
+                        }
+                        if((e+i)->unidade == 3) {
+                            soma_e3 = soma_e3 + (e+i)->preco_exame;
+                        }
+
+                        soma_t3 = soma_c3 + soma_e3;
+
+                    }
+
+                    printf("A Unidade 3 teve um total de R$ %.2f neste mês.\n", soma_t3);
+                    break;
+            case 4: system("cls");
+                    //menuPrincipal(); //limpa a tela
+                    break;
+            default: printf("Opção inválida !\n");
+                     break;
+
+        }
+
+        system("pause"); //ou getch()
+		system("cls"); //limpa a tela
+
+    } while(op != 4);
+}
+
+void retornaValormensal(consulta *c, exame *e, int t){
+
+    system("cls");
+
+    int i, op;
+    float soma_c1 = 0, soma_c2 = 0, soma_c3 = 0, soma_e1 = 0, soma_e2 = 0, soma_e3 = 0, soma_t1 = 0, soma_t2 = 0, soma_t3 = 0;
+
+    do{
+
+        printf("\n Selecione uma Unidade para consulta da renda mensal \n");
+		printf("[1] Unidade 1 \n");// criar unds diferentes e depois contar cada uma delas
+		printf("[2] Unidade 2 \n"); // fazer uma comparação das redes
+		printf("[3] Unidade 3 \n");// vai ser basicamente a mesma coisa, somar todos os gastos
+		printf("[4] Voltar \n");
+		printf("Escolha uma opção: \n");
+		scanf("%d", &op);
+
+        switch (op){
+            case 1: soma_t1 = 0;
+                    soma_c1 = 0;
+                    soma_e1 = 0;
+                    for(i = 0; i < t; i++){
+                        if((c+i)->unidade == 1){
+                            soma_c1 = soma_c1 + (c+i)->preco_consulta;
+
+                        }
+                        if((e+i)->unidade == 1) {
+                            soma_e1 = soma_e1 + (e+i)->preco_exame;
+                        }
+
+                        soma_t1 = soma_c1 + soma_e1;
+                    }
+
+                    printf("A Unidade 1 teve um total de R$ %.2f neste mês.\n", soma_t1);
+                    break;
+            case 2: soma_t2 = 0;
+                    soma_c2 = 0;
+                    soma_e2 = 0;
+                    for(i = 0; i < t; i++){
+                        if((c+i)->unidade == 2){
+                            soma_c2 = soma_c2 + (c+i)->preco_consulta;
+
+                        }
+                        if((e+i)->unidade == 2) {
+                            soma_e2 = soma_e2 + (e+i)->preco_exame;
+                        }
+
+                        soma_t2 = soma_c2 + soma_e2;
+
+                    }
+
+                    printf("A Unidade 2 teve um total de R$ %.2f neste mês.\n", soma_t2);
+                    break;
+            case 3: soma_t3 = 0;
+                    soma_c3 = 0;
+                    soma_e3 = 0;
+                    for(i = 0; i < t; i++){
+                        if((c+i)->unidade == 3){
+                            soma_c3 = soma_c3 + (c+i)->preco_consulta;
+                        }
+                        if((e+i)->unidade == 3) {
+                            soma_e3 = soma_e3 + (e+i)->preco_exame;
+                        }
+
+                        soma_t3 = soma_c3 + soma_e3;
+
+                    }
+
+                    printf("A Unidade 3 teve um total de R$ %.2f neste mês.\n", soma_t3);
+                    break;
+            case 4: system("cls");
+                    //menuPrincipal(); //limpa a tela
+                    break;
+            default: printf("Opção inválida !\n");
+                     break;
+
+        }
+
+        system("pause"); //ou getch()
+		system("cls"); //limpa a tela
+
+    } while(op != 4);
+}
+
+void retornaTotal (consulta *c, exame *e, int t){
+
+    int i;
+    float soma_c1 = 0, soma_c2 = 0, soma_c3 = 0, soma_e1 = 0, soma_e2 = 0, soma_e3 = 0, soma_t1 = 0, soma_t2 = 0, soma_t3 = 0, soma_T;
+
+    for(i = 0; i < t; i++){
+        if((c+i)->unidade == 3){
+            soma_c3 = soma_c3 + (c+i)->preco_consulta;
+        }
+        if((e+i)->unidade == 3) {
+            soma_e3 = soma_e3 + (e+i)->preco_exame;
+        }
+
+        if((c+i)->unidade == 2){
+            soma_c2 = soma_c2 + (c+i)->preco_consulta;
+        }
+        if((e+i)->unidade == 2) {
+            soma_e2 = soma_e2 + (e+i)->preco_exame;
+        }
+
+        if((c+i)->unidade == 1){
+            soma_c3 = soma_c3 + (c+i)->preco_consulta;
+        }
+        if((e+i)->unidade == 1) {
+            soma_e1 = soma_e1 + (e+i)->preco_exame;
+        }
+        soma_t1 = soma_c1 + soma_e1;
+        soma_t2 = soma_c2 + soma_e2;
+        soma_t3 = soma_c3 + soma_e3;
+    }
+
+
+    soma_T = soma_t1 + soma_t2 + soma_t3;
+
+    printf("Todas as Unidades tiveram um lucro total somado de R$ %.2f .\n", soma_T);
+
+}
+
+void telaFeedback(feedback *fb){
+
+    int i = 0, confirma;
+    char resp;
+
+    fb = malloc((50 * 2) * sizeof(feedback));
+
+    do{
+        system("cls");
+        printf("\nDigite a sua nota com relação aos seguintes tópicos: \n\n");
+        printf("Atendimento dos funcionários (1 a 10): \n");
+        scanf("%d", &(fb + i)->atnd_func);
+        printf("Consultas e/ou exames realizados (1 a 10): \n");
+        scanf("%d", &(fb + i)->atnd_consult);
+        printf("Preço das(os) consultas/exames (1 a 10): \n");
+        scanf("%d", &(fb + i)->preco_consult);
+        printf("Estabelecimento (conforto, iluminação, banheiro, etc...) (1 a 10): \n");
+        scanf("%d", &(fb + i)->estab);
+        fflush(stdin);
+        printf("Nos dê uma avaliação mais detalhada: \n");
+        gets((fb + i)->descri_feed);
+        i++;
+
+        //printf("Deseja realizar outro Feedback ? (S/N)\n");
+        //scanf("%c", &resp);
+
+		confirma = 0;
+
+        while(confirma == 0){
+            fflush(stdin);
+            printf("Deseja realizar outro Feedback ? (S/N)\n");
+            scanf("%c", &resp);
+
+            while((resp != 'N' && resp != 'n') && (resp != 'S' && resp != 's')){
+                printf("Escolha uma opção válida ! \n");
+                system("pause");
+                system("cls");
+                printf("Deseja realizar outro Feedback ? (S/N)\n");
+                scanf("%c", &resp);
+                fflush(stdin);
+            }
+            fflush(stdin);
+            confirma = 1;
+        }
+
+    } while(resp == 'S' || resp == 's');
+
+    printf("Obrigado pelo seu Feedback !\n");
+}
+
+void main(){
+
+    setlocale(LC_ALL, "Portuguese");
+
+    telaLogin();
+}
