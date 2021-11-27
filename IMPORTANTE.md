@@ -1,3 +1,3 @@
 # PIM
 
-A Seguir temos o código de cada tela SEPARADAMENTE, o código junto estará levemente diferente pois foi a versão final do código
+O WEB site do PIM do 4 Semestre está zipado na pasta PIM_4, e o Android no PIM_4_Android
