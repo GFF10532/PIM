@@ -24,7 +24,7 @@ void main() {
         } else {
             printf("Opção Inválida ! Selecione uma opção válida ! \n");
         }
-    }
+    } 
 
     while(verifica_senha == 0){
         printf("\n\t\t Consultório Boa Saúde\n\n Login: ");
